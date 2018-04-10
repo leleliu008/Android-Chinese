@@ -1,0 +1,2 @@
+# Android-ChineseAdministrativeDivisions
+中国的行政区域数据
