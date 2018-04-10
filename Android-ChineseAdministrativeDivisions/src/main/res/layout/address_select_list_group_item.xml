@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_stoke_rectangle"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/address_select_list_group_item_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:drawableLeft="@drawable/group_indicator"
+        android:drawablePadding="@dimen/dp750_10"
+        android:padding="@dimen/dp750_20"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp750_30" />
+</LinearLayout>

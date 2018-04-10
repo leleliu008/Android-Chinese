@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.fpliu.newton.chinese_administrative_divisions">
+
+    <application>
+
+        <activity
+            android:name=".AddressSelectActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+    </application>
+</manifest>
