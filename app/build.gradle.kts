@@ -42,15 +42,14 @@ android {
 
 dependencies {
     api(project(":Android-ChineseAdministrativeDivisions"))
-    //http://kotlinlang.org/docs/reference/using-gradle.html#configuring-dependencies
-    api("org.jetbrains.kotlin:kotlin-stdlib:1.2.21")
-    api("com.android.support:support-annotations:26.1.0")
-    api("com.android.support:appcompat-v7:26.1.0")
-    api("com.android.support:design:26.1.0")
-    api("com.fpliu:Android-BaseUI:1.0.0")
-    api("com.fpliu:Android-CustomDimen:1.0.0")
-    api("com.fpliu:Android-CustomDrawable:1.0.0")
-    api("com.fpliu:Android-RecyclerViewHelper:1.0.0")
-    api("com.fpliu:Android-List:1.0.0")
-    api("com.fpliu:Android-Tab:1.0.0")
+//    //http://kotlinlang.org/docs/reference/using-gradle.html#configuring-dependencies
+//    api("org.jetbrains.kotlin:kotlin-stdlib:1.2.21")
+//    api("com.android.support:support-annotations:26.1.0")
+//    api("com.android.support:appcompat-v7:26.1.0")
+//    api("com.android.support:design:26.1.0")
+//    api("com.fpliu:Android-BaseUI:1.0.0")
+//    api("com.fpliu:Android-CustomDimen:1.0.0")
+//    api("com.fpliu:Android-CustomDrawable:1.0.0")
+//    api("com.fpliu:Android-RecyclerViewHelper:1.0.0")
+//    api("com.fpliu:Android-List:1.0.0")
 }

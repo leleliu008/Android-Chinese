@@ -3,7 +3,6 @@ package com.fpliu.newton.chinese_administrative_divisions.sample
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import com.fpliu.newton.chinese_administrative_divisions.AddressSelectActivity
 import com.fpliu.newton.ui.base.BaseActivity
 import com.fpliu.newton.ui.base.BaseUIConfig

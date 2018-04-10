@@ -5,12 +5,21 @@
 <img src="./effect.jpg" width="445" height="774" alt="效果图" />
 
 ## 依赖方法
+在要使用的模块中的<code>build.gradle</code>或者<code>build.gradle.kts</code>配置脚本中的依赖中加入如下：
 ```
 api("com.fpliu:Android-ChineseAdministrativeDivisions:1.0.0")
 ```
 ## 使用方法
 这里只提供kotlin版本的使用方法，Java语言类似：
 ```
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
+import com.fpliu.newton.chinese_administrative_divisions.AddressSelectActivity
+import com.fpliu.newton.ui.base.BaseActivity
+import com.fpliu.newton.ui.base.BaseUIConfig
+import kotlinx.android.synthetic.main.activity_main.*
+
 class MainActivity : BaseActivity() {
 
     companion object {

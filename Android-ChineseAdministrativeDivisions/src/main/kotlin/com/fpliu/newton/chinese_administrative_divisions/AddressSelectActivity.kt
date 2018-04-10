@@ -37,7 +37,6 @@ class AddressSelectActivity : PullablePinnedHeaderExpandableListViewActivity<Cit
          */
         const val KEY_RESULT_CITY_NAME = "cityName"
 
-
         fun startForResult(activity: Activity, requestCode: Int) {
             Intent(activity, AddressSelectActivity::class.java).apply {
                 activity.startActivityForResult(this, requestCode)
