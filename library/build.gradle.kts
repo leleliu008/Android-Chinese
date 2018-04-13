@@ -7,6 +7,12 @@ plugins {
     id("com.jfrog.bintray")
 }
 
+val rootProjectName: String = rootProject.name
+
+base {
+    archivesBaseName = rootProjectName
+}
+
 android {
     compileSdkVersion(26)
     buildToolsVersion("26.0.2")
@@ -21,7 +27,8 @@ android {
     sourceSets {
         getByName("main") {
             jniLibs.srcDir("src/main/libs")
-            aidl.srcDirs("src/main/java")
+            aidl.srcDirs("src/main/kotlin")
+            java.srcDirs("src/main/kotlin")
         }
     }
 
@@ -63,10 +70,10 @@ group = "com.fpliu"
 version = "1.0.0"
 
 //项目的主页,这个是说明，可随便填
-val siteUrl = "https://github.com/leleliu008/Android-ChineseAdministrativeDivisions"
+val siteUrl = "https://github.com/leleliu008/$rootProjectName"
 
 // GitHub仓库的URL,这个是说明，可随便填
-val gitUrl = "https://github.com/leleliu008/Android-ChineseAdministrativeDivisions"
+val gitUrl = "https://github.com/leleliu008/$rootProjectName"
 
 tasks {
     "install"(Upload::class) {
@@ -76,7 +83,8 @@ tasks {
                     pom.project {
                         withGroovyBuilder {
                             "packaging"("aar")
-                            "name"(project.name)
+                            "artifactId"(rootProjectName)
+                            "name"(rootProjectName)
                             "url"(siteUrl)
                             "licenses" {
                                 "license" {
@@ -107,7 +115,7 @@ tasks {
 // 生成jar包的task
 val sourcesJarTask = task("sourcesJar", Jar::class) {
     from(android.sourceSets["main"].java.srcDirs)
-    baseName = "Android-ChineseAdministrativeDivisions"
+    baseName = rootProjectName
     classifier = "sources"
 }
 
@@ -122,7 +130,7 @@ task("javadoc", Javadoc::class) {
 // 生成javaDoc的jar
 val javadocJarTask = task("javadocJar", Jar::class) {
     val javaDockTask = dependsOn("javadoc")
-    baseName = "Android-ChineseAdministrativeDivisions"
+    baseName = rootProjectName
     classifier = "javadoc"
     from(javaDockTask.path)
 }
@@ -142,7 +150,7 @@ bintray {
     pkg = PackageConfig().apply {
         userOrg = "fpliu"
         repo = "newton"
-        name = "Android-ChineseAdministrativeDivisions"
+        name = rootProjectName
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         setLicenses("Apache-2.0")

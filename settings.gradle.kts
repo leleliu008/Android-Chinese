@@ -1,2 +1,2 @@
 include(":app")
-include(":Android-ChineseAdministrativeDivisions")
+include(":library")
