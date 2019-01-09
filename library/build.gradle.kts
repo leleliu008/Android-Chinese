@@ -1,27 +1,42 @@
+import com.fpliu.gradle.bintrayUploadExtension
 import java.util.Properties
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        //对android-maven-gradle-plugin和gradle-bintray-plugin两个插件的包装、简化插件
+        //https://github.com/leleliu008/BintrayUploadAndroidGradlePlugin
+        classpath("com.fpliu:BintrayUploadGradlePlugin:1.0.0")
+    }
+}
+
+apply {
+    plugin("com.fpliu.bintray")
+}
 
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("com.github.dcendents.android-maven")
-    id("com.jfrog.bintray")
-}
 
-val rootProjectName: String = rootProject.name
+    //用于构建aar和maven包
+    //https://github.com/dcendents/android-maven-gradle-plugin
+    id("com.github.dcendents.android-maven").version("2.0")
 
-base {
-    archivesBaseName = rootProjectName
+    //用于上传maven包到jCenter中
+    //https://github.com/bintray/gradle-bintray-plugin
+    id("com.jfrog.bintray").version("1.7.3")
 }
 
 android {
-    compileSdkVersion(26)
-    buildToolsVersion("26.0.2")
+    compileSdkVersion(28)
 
     defaultConfig {
-        minSdkVersion(14)
-        targetSdkVersion(25)
+        minSdkVersion(18)
+        targetSdkVersion(28)
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = "2.0.0"
     }
 
     sourceSets {
@@ -50,110 +65,28 @@ android {
 }
 
 dependencies {
-    api(fileTree(mapOf(Pair("dir", "src/main/libs"), Pair("include", "*.jar"))))
-    //http://kotlinlang.org/docs/reference/using-gradle.html#configuring-dependencies
-    api("org.jetbrains.kotlin:kotlin-stdlib:1.2.21")
-    api("com.android.support:support-annotations:26.1.0")
-    api("com.android.support:appcompat-v7:26.1.0")
-    api("com.android.support:design:26.1.0")
-    api("com.fpliu:Android-BaseUI:1.0.0")
-    api("com.fpliu:Android-CustomDimen:1.0.0")
-    api("com.fpliu:Android-CustomDrawable:1.0.0")
-    api("com.fpliu:Android-ExpandableList:1.0.0")
-    api("com.fpliu:Android-List:1.0.0")
+    api("com.fpliu:Android-ExpandableList:2.0.0")
+    api("com.fpliu:Android-List:2.0.0")
 }
 
 // 这里是groupId,必须填写,一般填你唯一的包名
 group = "com.fpliu"
 
 //这个是版本号，必须填写
-version = "1.0.0"
+version = android.defaultConfig.versionName ?: "1.0.0"
 
-//项目的主页,这个是说明，可随便填
-val siteUrl = "https://github.com/leleliu008/$rootProjectName"
-
-// GitHub仓库的URL,这个是说明，可随便填
-val gitUrl = "https://github.com/leleliu008/$rootProjectName"
-
-tasks {
-    "install"(Upload::class) {
-        repositories {
-            withConvention(MavenRepositoryHandlerConvention::class) {
-                mavenInstaller {
-                    pom.project {
-                        withGroovyBuilder {
-                            "packaging"("aar")
-                            "artifactId"(rootProjectName)
-                            "name"(rootProjectName)
-                            "url"(siteUrl)
-                            "licenses" {
-                                "license" {
-                                    "name"("The Apache Software License, Version 2.0")
-                                    "url"("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                                }
-                            }
-                            "developers" {
-                                "developer" {
-                                    "id"("fpliu")
-                                    "name"("fpliu")
-                                    "email"("leleliu008@gmail.com")
-                                }
-                            }
-                            "scm" {
-                                "connection"(gitUrl)
-                                "developerConnection"(gitUrl)
-                                "url"(siteUrl)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-// 生成jar包的task
-val sourcesJarTask = task("sourcesJar", Jar::class) {
-    from(android.sourceSets["main"].java.srcDirs)
-    baseName = rootProjectName
-    classifier = "sources"
-}
-
-// 生成jarDoc的task
-task("javadoc", Javadoc::class) {
-    source(android.sourceSets["main"].java.srcDirs)
-    exclude("**/*.ks")
-    classpath += project.files(android.bootClasspath)
-    isFailOnError = false
-}
-
-// 生成javaDoc的jar
-val javadocJarTask = task("javadocJar", Jar::class) {
-    val javaDockTask = dependsOn("javadoc")
-    baseName = rootProjectName
-    classifier = "javadoc"
-    from(javaDockTask.path)
-}
-
-artifacts {
-    add("archives", javadocJarTask)
-    add("archives", sourcesJarTask)
-}
-
+val rootProjectName: String = rootProject.name
 val properties = Properties().apply { load(project.rootProject.file("local.properties").inputStream()) }
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
 
-    setConfigurations("archives")
+bintrayUploadExtension {
+    developerName = "leleliu008"
+    developerEmail = "leleliu008@gamil.com"
 
-    pkg = PackageConfig().apply {
-        userOrg = "fpliu"
-        repo = "newton"
-        name = rootProjectName
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        setLicenses("Apache-2.0")
-        publish = true
-    }
+    projectSiteUrl = "https://github.com/$developerName/$rootProjectName"
+    projectGitUrl = "https://github.com/$developerName/$rootProjectName"
+
+    bintrayUserName = "fpliu"
+    bintrayOrganizationName = "fpliu"
+    bintrayRepositoryName = "newton"
+    bintrayApiKey = properties.getProperty("bintray.apikey")
 }

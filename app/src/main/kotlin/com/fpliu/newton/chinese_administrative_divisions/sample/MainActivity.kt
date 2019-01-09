@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.fpliu.newton.chinese_administrative_divisions.AddressSelectActivity
 import com.fpliu.newton.ui.base.BaseActivity
 import com.fpliu.newton.ui.base.BaseUIConfig
+import com.jakewharton.rxbinding3.view.clicks
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -19,12 +20,12 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        BaseUIConfig.setHeadHeight(resources.getDimension(R.dimen.dp750_100).toInt())
+        BaseUIConfig.headHeight = resources.getDimension(R.dimen.dp750_100).toInt()
 
         super.onCreate(savedInstanceState)
         title = "地区选择使用示例"
         setContentView(R.layout.activity_main)
-        click(buttom).subscribe { AddressSelectActivity.startForResult(this, REQUEST_CODE_SELECT_ADDRESS) }
+        button.clicks().subscribe { AddressSelectActivity.startForResult(this, REQUEST_CODE_SELECT_ADDRESS) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
