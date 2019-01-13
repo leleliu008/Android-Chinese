@@ -1,4 +1,4 @@
-# Android-ChineseAdministrativeDivisions
+# Android-Chinese
 中国的行政区域数据,数据来源是：<a href="http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/" target=_blank>中华人民共和国统计局-统计用区划和城乡划分代码</a>
 
 ## 效果图
@@ -7,7 +7,7 @@
 ## 依赖方法
 在要使用的模块中的<code>build.gradle</code>或者<code>build.gradle.kts</code>配置脚本中的依赖中加入如下：
 ```
-api("com.fpliu:Android-ChineseAdministrativeDivisions:1.0.0")
+api("com.fpliu:Android-Chinese:2.0.0")
 ```
 ## 使用方法
 这里只提供kotlin版本的使用方法，Java语言类似：
