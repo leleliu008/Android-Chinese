@@ -15,6 +15,9 @@ api("com.fpliu:Android-Chinese:2.0.0")
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import com.jakewharton.rxbinding3.view.clicks
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
+import com.uber.autodispose.autoDisposable
 import com.fpliu.newton.chinese_administrative_divisions.AddressSelectActivity
 import com.fpliu.newton.ui.base.BaseActivity
 import com.fpliu.newton.ui.base.BaseUIConfig
@@ -29,7 +32,10 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        click(buttom).subscribe { AddressSelectActivity.startForResult(this, REQUEST_CODE_SELECT_ADDRESS) }
+        button
+            .clicks()
+            .autoDisposable(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
+            .subscribe { AddressSelectActivity.startForResult(this, REQUEST_CODE_SELECT_ADDRESS) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
