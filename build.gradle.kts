@@ -1,6 +1,7 @@
 buildscript {
     repositories {
-        jcenter()
+        jcenter { url = uri("https://maven.aliyun.com/repository/jcenter") }
+        // google仓库在北京海淀区有CDN节点，所以，不需要替换
         google()
     }
     dependencies {
@@ -10,14 +11,16 @@ buildscript {
 
         //Kotlin编译的插件
         //http://kotlinlang.org/docs/reference/using-gradle.html
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.11")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.21")
     }
 }
 
 allprojects {
     repositories {
-        jcenter()
+        jcenter { url = uri("https://maven.aliyun.com/repository/jcenter") }
+        // google仓库在北京海淀区有CDN节点，所以，不需要替换
         google()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 

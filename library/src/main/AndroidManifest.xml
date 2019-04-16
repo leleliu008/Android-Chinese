@@ -4,7 +4,17 @@
     <application>
 
         <activity
-            android:name=".AddressSelectActivity"
+            android:name=".ui.AddressSelectActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.AddressSelectActivity2"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.AddressSelectActivity3"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
     </application>

@@ -4,6 +4,7 @@
     package="com.fpliu.newton.chinese_administrative_divisions.sample">
 
     <application
+        android:name=".MyApp"
         android:label="ChineseAdministrativeDivisionsTest"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:replace="android:label">

@@ -36,13 +36,12 @@ android {
         minSdkVersion(18)
         targetSdkVersion(28)
         versionCode = 1
-        versionName = "2.0.0"
+        versionName = "2.0.1"
     }
 
     sourceSets {
         getByName("main") {
             jniLibs.srcDir("src/main/libs")
-            aidl.srcDirs("src/main/kotlin")
             java.srcDirs("src/main/kotlin")
         }
     }
@@ -65,8 +64,10 @@ android {
 }
 
 dependencies {
-    api("com.fpliu:Android-ExpandableList:2.0.0")
+    api("com.fpliu:Android-ExpandableList:2.0.2")
     api("com.fpliu:Android-List:2.0.0")
+    api("com.fpliu:Android-BaseUI:2.0.1")
+    api("com.github.VictorAlbertos:RxActivityResult:0.5.0-2.x")
 }
 
 // 这里是groupId,必须填写,一般填你唯一的包名

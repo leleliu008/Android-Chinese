@@ -1,4 +1,4 @@
-package com.fpliu.newton.chinese_administrative_divisions
+package com.fpliu.newton.chinese_administrative_divisions.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -7,21 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ExpandableListView
 import android.widget.TextView
+import com.fpliu.newton.chinese_administrative_divisions.Manager
+import com.fpliu.newton.chinese_administrative_divisions.R
+import com.fpliu.newton.chinese_administrative_divisions.entity.AddressNode
 import com.fpliu.newton.log.Logger
+import com.fpliu.newton.ui.base.BaseActivity
 import com.fpliu.newton.ui.expandablelist.PinnedHeaderExpandableListView
 import com.fpliu.newton.ui.expandablelist.PullablePinnedHeaderExpandableListViewActivity
 import com.fpliu.newton.ui.list.ViewHolder
 import com.fpliu.newton.ui.pullable.PullType
 import com.fpliu.newton.ui.pullable.PullableViewContainer
+import com.uber.autodispose.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import rx_activity_result2.RxActivityResult
 
 /**
  * 选择省份和城市的界面
  *
  * @author 792793182@qq.com 2017-06-08.
  */
-class AddressSelectActivity : PullablePinnedHeaderExpandableListViewActivity<City, Province>() {
+class AddressSelectActivity : PullablePinnedHeaderExpandableListViewActivity<AddressNode, AddressNode>() {
 
     companion object {
 
@@ -30,21 +36,32 @@ class AddressSelectActivity : PullablePinnedHeaderExpandableListViewActivity<Cit
         /**
          * 返回的结果 - 省份名称
          */
-        const val KEY_RESULT_PROVINCE_NAME = "provinceName"
+        private const val KEY_RESULT_PROVINCE = "province"
 
         /**
          * 返回的结果 - 城市名称
          */
-        const val KEY_RESULT_CITY_NAME = "cityName"
+        private const val KEY_RESULT_CITY = "city"
 
-        fun startForResult(activity: Activity, requestCode: Int) {
-            Intent(activity, AddressSelectActivity::class.java).apply {
-                activity.startActivityForResult(this, requestCode)
-            }
+        fun startForResult(activity: BaseActivity, onResult: (province: AddressNode, city: AddressNode) -> Unit, onError: (Throwable) -> Unit) {
+            RxActivityResult
+                .on(activity)
+                .startIntent(Intent(activity, AddressSelectActivity::class.java))
+                .filter { it.resultCode() == Activity.RESULT_OK }
+                .map { it.data()!! }
+                .autoDisposable(activity.disposeOnDestroy())
+                .subscribe({
+                    val province = it.getParcelableExtra<AddressNode>(KEY_RESULT_PROVINCE)
+                    val city = it.getParcelableExtra<AddressNode>(KEY_RESULT_CITY)
+                    onResult.invoke(province, city)
+                }, {
+                    Logger.e(TAG, "startForResult()", it)
+                    onError.invoke(it)
+                })
         }
     }
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         title = "选择地区"
@@ -59,10 +76,14 @@ class AddressSelectActivity : PullablePinnedHeaderExpandableListViewActivity<Cit
             .getAsyncReadFromAssetsObservable(this)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(disposeOnDestroy())
             .subscribe({
                 setGroupItems(it)
                 pullableViewContainer.finishRequestSuccess(pullType)
-            }, { Logger.e(TAG, "", it) })
+            }, {
+                Logger.e(TAG, "", it)
+                pullableViewContainer.finishRequestWithAction(pullType, false, "出错了", "刷新", ::refresh)
+            })
     }
 
     override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup?): View {
@@ -94,14 +115,13 @@ class AddressSelectActivity : PullablePinnedHeaderExpandableListViewActivity<Cit
 
     override fun onChildClick(parent: ExpandableListView, convertView: View?,
                               groupPosition: Int, childPosition: Int, id: Long): Boolean {
-        val provinceCity = getGroup(groupPosition)
+        val province = getGroup(groupPosition)
         val city = getChild(groupPosition, childPosition)
 
         Intent().apply {
-            putExtra(KEY_RESULT_PROVINCE_NAME, provinceCity.name)
-            putExtra(KEY_RESULT_CITY_NAME, city.name)
-            setResult(Activity.RESULT_OK, this)
-        }
+            putExtra(KEY_RESULT_PROVINCE, province)
+            putExtra(KEY_RESULT_CITY, city)
+        }.let { setResult(Activity.RESULT_OK, it) }
 
         finish()
         return false
@@ -116,4 +136,6 @@ class AddressSelectActivity : PullablePinnedHeaderExpandableListViewActivity<Cit
             headerView.findViewById<TextView>(R.id.address_select_list_group_item_text).text = it.name
         }
     }
+
+    override fun getChildren(group: AddressNode) = group.children
 }

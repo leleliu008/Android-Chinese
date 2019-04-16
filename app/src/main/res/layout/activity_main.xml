@@ -6,10 +6,32 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="打开地区选择" />
+        android:background="@drawable/shape_round_corner_blue_light_bg"
+        android:paddingLeft="@dimen/dp750_30"
+        android:paddingRight="@dimen/dp750_30"
+        android:text="打开地区选择1" />
 
 
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_round_corner_blue_light_bg"
+        android:paddingLeft="@dimen/dp750_30"
+        android:paddingRight="@dimen/dp750_30"
+        android:layout_marginTop="@dimen/dp750_50"
+        android:text="打开地区选择2" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_round_corner_blue_light_bg"
+        android:paddingLeft="@dimen/dp750_30"
+        android:paddingRight="@dimen/dp750_30"
+        android:layout_marginTop="@dimen/dp750_50"
+        android:text="打开地区选择3" />
 </LinearLayout>

@@ -1,12 +1,14 @@
 package com.fpliu.newton.chinese_administrative_divisions.sample
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import com.fpliu.newton.chinese_administrative_divisions.AddressSelectActivity
+import com.fpliu.newton.chinese_administrative_divisions.entity.AddressNode
+import com.fpliu.newton.chinese_administrative_divisions.ui.AddressSelectActivity
+import com.fpliu.newton.chinese_administrative_divisions.ui.AddressSelectActivity2
+import com.fpliu.newton.chinese_administrative_divisions.ui.AddressSelectActivity3
+import com.fpliu.newton.log.Logger
 import com.fpliu.newton.ui.base.BaseActivity
-import com.fpliu.newton.ui.base.BaseUIConfig
 import com.jakewharton.rxbinding3.view.clicks
+import com.uber.autodispose.autoDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -15,25 +17,41 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 class MainActivity : BaseActivity() {
 
-    companion object {
-        private const val REQUEST_CODE_SELECT_ADDRESS = 100
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        BaseUIConfig.headHeight = resources.getDimension(R.dimen.dp750_100).toInt()
-
         super.onCreate(savedInstanceState)
+
         title = "地区选择使用示例"
+
         setContentView(R.layout.activity_main)
-        button.clicks().subscribe { AddressSelectActivity.startForResult(this, REQUEST_CODE_SELECT_ADDRESS) }
+
+        button1.clicks().autoDisposable(disposeOnDestroy()).subscribe(::onClicked1)
+        button2.clicks().autoDisposable(disposeOnDestroy()).subscribe(::onClicked2)
+        button3.clicks().autoDisposable(disposeOnDestroy()).subscribe(::onClicked3)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_SELECT_ADDRESS && resultCode == Activity.RESULT_OK && data != null) {
-            val provinceName = data.getStringExtra(AddressSelectActivity.KEY_RESULT_PROVINCE_NAME)
-            val cityName = data.getStringExtra(AddressSelectActivity.KEY_RESULT_CITY_NAME)
-            showToast("$provinceName , $cityName")
-        }
+
+    private fun onClicked1(u: Unit) {
+        AddressSelectActivity.startForResult(this, ::onResult, ::onError)
+    }
+
+    private fun onClicked2(u: Unit) {
+        AddressSelectActivity2.startForResult(this, ::onResult, ::onError)
+    }
+
+    private fun onClicked3(u: Unit) {
+        AddressSelectActivity3.startForResult(this, ::onResult3, ::onError)
+    }
+
+    private fun onResult(province: AddressNode, city: AddressNode) {
+        showToast("${province.name}, ${city.name}")
+    }
+
+    private fun onResult3(province: AddressNode, city: AddressNode, distinct: AddressNode) {
+        showToast("${province.name}, ${city.name}, ${distinct.name}")
+    }
+
+    private fun onError(e: Throwable) {
+        Logger.e("XXX", "onError()", e)
+        showToast("出错了")
     }
 }
